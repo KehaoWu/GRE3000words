@@ -4,9 +4,9 @@ A web to memory English words for GRE test. 一个基于tornado开发的再要�
 1. To install python and modules: tornado and MySQLdb
 
 2. To create your mysql account:
-
+```shell
     mysql -uroot -p
-
+```
     mysql>  insert into mysql.user(Host,User,Password) values("localhost","3000word",password(""));
 
     mysql> flush privileges;
