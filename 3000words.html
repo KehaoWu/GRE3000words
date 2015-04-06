@@ -1,0 +1,75 @@
+<head>
+	<title>GRE记单词 皓哥专用版</title>
+	<link rel="shortcut icon" href="{{ static_url("favicon.ico") }}">
+</head>
+<header>
+	<h1> 再要你命3000 皓哥专用版 </h1>
+</header>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" >
+	var correct = {{ correct }};
+	var recordID = {{ recordID }};
+	function checkAns (ans) {
+		if (ans == correct ) {
+			$.post(document.URL,{ID: recordID });
+			window.open(document.URL,"_self");
+		} else {
+			alert("wrong answer.");
+		}
+	};
+</script>
+<style type="text/css">
+	body {background-color: #AAA; margin: 20px auto;background-image: url("{{ static_url("bg.jpg") }}");}
+	header {width:388px;margin:0 auto;}
+	form {display: none;}
+	.main {background: #BBB; width: 98%;height: 400px; margin: 0 auto;box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);}
+	.answer {background-color: #BBB;width:388px; margin:0 auto; border: 1px solid #BBB;}
+	.answer p {font-size: 12px;}
+	.question p {font-size: 14px;  color: #222; padding: 5px; }
+	.answer ul {list-style:none;margin: 0px; padding: 0px;}
+	.answer ul li {padding: 3px; font-size: 14px;line-height: 25px;border: 1px solid #CCC;height:50px;display: list-item;cursor: pointer;}
+	.answer ul li:hover {background-color: #e5e5e5;}
+</style>
+<body>
+<div class="main">
+<div class="answer">
+	<p> 当前记录数 ：{{ recordID }} / {{ totalCount }}</p>
+	<div class="question"> {{ q }} </div> 
+	<ul id="ans-box">
+		<li onclick="checkAns(1)">{{ a1 }}</li>
+		<li onclick="checkAns(2)">{{ a2 }}</li>
+		<li onclick="checkAns(3)">{{ a3 }}</li>
+		<li onclick="checkAns(4)">{{ a4 }}</li>
+	</ul>
+</div>
+<form>
+<table>
+	<tr>
+		<td>
+
+		</td>
+	<tr>
+	<tr>
+		<td>
+			<input type="radio" name=a value=1 onclick="checkAns(1)"/> 
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="radio" name=a value=2 onclick="checkAns(2)"/> {{ a2 }}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="radio" name=a value=3 onclick="checkAns(3)"/> {{ a3 }} 
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="radio" name=a value=4 onclick="checkAns(4)"/> {{ a4 }}
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+</body>
