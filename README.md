@@ -6,7 +6,7 @@ A web to memory English words for GRE test. 一个基于tornado开发的再要�
 2. To create your mysql account:
 ```shell
     mysql -uroot -p
-```
+```mysql
     mysql>  insert into mysql.user(Host,User,Password) values("localhost","3000word",password(""));
 
     mysql> flush privileges;
@@ -20,14 +20,14 @@ A web to memory English words for GRE test. 一个基于tornado开发的再要�
     mysql -u3000word 3000word <GRE3000words_create.sql
 
 3. To reencode 3000.txt. PS: 3000.txt.old is saved as unicode text file on Windows OS.
-    
+```shell    
     iconv -f UCS-2 -t utf8 3000.txt.old -o 3000.txt
 
 4. To insert data into MySQL database:
-    
+```python    
     python toMySQL.py
 
 5. To Run your Server:
-    
+```shell    
     main python main.py --port=3380  >run.log 2>&1 & 
     
