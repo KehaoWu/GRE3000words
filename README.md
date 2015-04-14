@@ -8,7 +8,7 @@ A web to memory English words for GRE test. 一个基于tornado开发的再要�
     mysql -uroot -p
 ```
 ```mysql
-    mysql>  insert into mysql.user(Host,User,Password) values("localhost","3000word",password(""));
+    mysql> insert into mysql.user(Host,User,Password) values("localhost","3000word",password(""));
     mysql> flush privileges;
     mysql> create database 3000word;
     mysql> GRANT ALL PRIVILEGES ON 3000word.* TO '3000word'@'localhost' IDENTIFIED BY '' WITH GRANT OPTION;
@@ -25,5 +25,5 @@ A web to memory English words for GRE test. 一个基于tornado开发的再要�
 ```
 * To Run your Server:
 ```shell    
-    main python main.py --port=3380  >run.log 2>&1 & 
+    python main.py --port=3380  >run.log 2>&1 & 
 ``` 

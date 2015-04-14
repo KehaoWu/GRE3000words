@@ -68,7 +68,8 @@ if __name__ == '__main__':
 	app = tornado.web.Application(
 		handlers=[(r'/', IndexHandler), (r'/3000words', PoemPageHandler)],
 		template_path=os.path.join(os.path.dirname(__file__), ""),
-		static_path=os.path.join(os.path.dirname(__file__), "statics")
+		static_path=os.path.join(os.path.dirname(__file__), "statics"),
+		debug=True
 	)
  
 
