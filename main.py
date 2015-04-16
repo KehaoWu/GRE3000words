@@ -33,6 +33,7 @@ class PoemPageHandler(tornado.web.RequestHandler):
 		sql = "SELECT * from word LIMIT %d,1;" % recordID
 		cursor.execute(sql)
 		r = cursor.fetchone()
+		times = r[0]
 		db.commit()
 		def randomAnswer ():
 			record_random = random.randint(1,3000)
@@ -49,7 +50,6 @@ class PoemPageHandler(tornado.web.RequestHandler):
 		answer_set.insert(answer_index,correct_answer)
 		db.close()
 		q = r[1]
-		times = r[0]
 		a1 = answer_set[0]
 		a2 = answer_set[1]
 		a3 = answer_set[2]
