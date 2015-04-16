@@ -20,11 +20,16 @@ class PoemPageHandler(tornado.web.RequestHandler):
 	def get(self):
 		db = MySQLdb.connect("localhost","3000word","","3000word")
 		cursor = db.cursor()
-		cursor.execute("SELECT * from record;")
+		cursor.execute("SELECT * FROM record ORDER BY id DESC LIMIT 1;")
 		r = cursor.fetchone()
 		db.commit()
-		totalCount = r[1]
-		recordID = r[0]
+		totalCount = r[2]
+		recordID = r[1]
+		if recordID == totalCount:
+			sql = "INSERT INTO record (record,totalCount) values(0,'%d')" % (totalCount)
+			cursor.execute(sql)
+			recordID = 0
+			db.commit()
 		sql = "SELECT * from word LIMIT %d,1;" % recordID
 		cursor.execute(sql)
 		r = cursor.fetchone()
@@ -33,23 +38,24 @@ class PoemPageHandler(tornado.web.RequestHandler):
 			record_random = random.randint(1,3000)
 			sql = "SELECT * from word LIMIT %d,1;" % record_random
 			cursor.execute(sql)
-			r = cursor.fetchone()[1]
+			r = cursor.fetchone()[2]
 			s = r.split(";")
 			db.commit()
 			return s[random.randint(0,len(s)-1)]
 		answer_set = [randomAnswer(),randomAnswer(),randomAnswer()]
 		answer_index = random.randint(0,3)
-		correct_answer_t = r[1].split(";")
+		correct_answer_t = r[2].split(";")
 		correct_answer = correct_answer_t[random.randint(0,len(correct_answer_t)-1)]
 		answer_set.insert(answer_index,correct_answer)
 		db.close()
-		q = r[0]
+		q = r[1]
+		times = r[0]
 		a1 = answer_set[0]
 		a2 = answer_set[1]
 		a3 = answer_set[2]
 		a4 = answer_set[3]
 		self.render('3000words.html',recordID=recordID, totalCount=totalCount, \
-			q=q,a1=a1,a2=a2,a3=a3,a4=a4,correct=answer_index+1)
+			q=q,times=times,a1=a1,a2=a2,a3=a3,a4=a4,correct=answer_index+1)
 
 	def post(self):
 		db = MySQLdb.connect("localhost","3000word","","3000word")

@@ -12,11 +12,13 @@ for line in open("3000.txt"):
 	try:
 		cursor.execute(sql)
 		db.commit()
+		n+=1
 	except:
-		print "error"
+		print word+" error"
 		db.rollback()
-	n+=1
-sql = "INSERT INTO record values(0,'%d')" % (n)
+
+print "\nINSERT data into record table."
+sql = "INSERT INTO record (record,totalCount) values(0,'%d')" % (n)
 cursor.execute(sql)
 db.commit()
 
