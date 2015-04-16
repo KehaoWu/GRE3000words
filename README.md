@@ -27,3 +27,10 @@ A web to memory English words for GRE test. 一个基于tornado开发的再要�
 ```shell    
     python main.py --port=3380  >run.log 2>&1 & 
 ``` 
+* To make it run at startup
+```
+    nohup python /home/conda/GRE3000words/main.py >/home/conda/GRE3000words/run.log 2>&1 &
+    add the sentence above into /etc/rc.d/rc.local 
+    confirm your permission and add execute privileges for /etc/rc.d/rc.local
+
+```
