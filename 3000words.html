@@ -9,10 +9,21 @@
 <script type="text/javascript" >
  var recordID
  var correct
- function loadWord (){
+ var oldCorrect
+function liHover (ans){
+     $("#a"+ans).mouseover(function(){
+          $("#a"+ans).css("background-color","#e5e5e5");
+     });
+     $("#a"+ans).mouseout(function(){
+          $("#a"+ans).css("background-color","#BBB");
+     });     
+}
+
+function loadWord (){
           $.get("api",function(data){
-          	$("#tip1").html("用户"+data.user+" 正在背诵GRE3000单词："+data.times+"遍")
-          	$("#tip2").html("已完成单词数 ："+data.recordID+"/"+data.totalCount)
+               $("#tip1").html("用户:"+data.user)
+               $("#tip2").html("正在背诵GRE3000单词："+data.times+"遍")
+          	$("#tip3").html("已完成单词数 ："+data.recordID+"/"+data.totalCount)
           	$("#a1").html(data.a1)
           	$("#a2").html(data.a2)
           	$("#a3").html(data.a3)
@@ -20,33 +31,19 @@
           	$("#q").html(data.q)
           	correct = data.correct
           	recordID = data.recordID
-          },"json")
-/*          $.get("api",function(data){
-          	var user = data.user
-          	var times data.times
-          	var recordID = data.recordID
-          	var totalCount = data.totalCount
-          	var a1 = data.a1
-          	var a2 = data.a2
-          	var a3 = data.a3
-          	var a4 = data.a4
-          	var nextCorrect = data.correct
-          	$("#tip1").html("用户"+data.user+" 正在背诵GRE3000单词："+data.times+"遍")
-          	$("#tip2").html("已完成单词数 ："+data.recordID+"/"+data.totalCount)
-          	$("#a1").html(data.a1)
-          	$("#a2").html(data.a2)
-          	$("#a3").html(data.a3)
-          	$("#a4").html(data.a4)
-          	$("#q").html(data.q)
-          	var correct = data.correct
-          },"json") */
+          },"json");
       }
- function checkAns (ans) {
+function checkAns (ans) {
 	if (ans == correct ) {
 		$.post("api",{ID: recordID });
 		loadWord()
 	} else {
-		alert("回答错了，还要加油哦！");
+          $(".ansList").css("background-color","#BBB")
+          $('#a'+ans).css("background-color","#FF5151")
+          liHover(1)
+          liHover(2)
+          liHover(3)
+          liHover(4)
 	}
 };
 jQuery(document).ready(loadWord);
@@ -55,26 +52,28 @@ jQuery(document).ready(loadWord);
 	body {background-color: #AAA; margin: 20px auto;background-image: url("{{ static_url("bg.jpg") }}");}
 	header {width:388px;margin:0 auto;}
 	form {display: none;}
-	p {font-size:24px; color:#0080FF;}
+	p {font-size:24px; color:#FFF;}
 	.main {background: #BBB; width: 98%;height: 400px; margin: 0 auto;box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);}
 	.answer {background-color: #BBB;width:388px; margin:0 auto; border: 1px solid #BBB;}
-	.answer p {font-size: 12px;}
-	.question {font-size: 24px;  color: #0080FF; padding: 5px; }
+	.answer p {font-size: 12px; margin:0;}
+	.question {font-size: 24px;  color: #FFF; padding: 5px; }
 	.answer ul {list-style:none;margin: 0px; padding: 0px;}
 	.answer ul li {padding: 3px; font-size: 14px;line-height: 25px;border: 1px solid #CCC;height:50px;display: list-item;cursor: pointer;}
 	.answer ul li:hover {background-color: #e5e5e5;}
+     .answer .align-right {text-align: right;}
 </style>
 <body>
 <div class="main">
 <div class="answer">
-	<p id="tip1"></p>
-	<p id="tip2"></p>
+     <p class="align-right" id="tip1"></p>
+     <p class="align-right" id="tip2"></p>
+	<p id="tip3"></p>
 	<div class="question" id="q">   </div> 
 	<ul id="ans-box">
-		<li id="a1" onclick="checkAns(1)"> </li>
-		<li id="a2" onclick="checkAns(2)"> </li>
-		<li id="a3" onclick="checkAns(3)"> </li>
-		<li id="a4" onclick="checkAns(4)"> </li>
+		<li class="ansList" id="a1" onclick="checkAns(1)"> </li>
+		<li class="ansList" id="a2" onclick="checkAns(2)"> </li>
+		<li class="ansList" id="a3" onclick="checkAns(3)"> </li>
+		<li class="ansList" id="a4" onclick="checkAns(4)"> </li>
 	</ul>
 </div>
 
