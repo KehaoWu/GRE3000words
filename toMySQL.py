@@ -18,7 +18,7 @@ for line in open("3000.txt"):
 		db.rollback()
 
 print "\nINSERT data into record table."
-sql = "INSERT INTO record (record,totalCount) values(0,'%d')" % (n)
+sql = "INSERT INTO record (record,totalCount,times,user) values(0,'%d',1,'%s')" % (n,"kehao.wu@gmail.com")
 cursor.execute(sql)
 db.commit()
 

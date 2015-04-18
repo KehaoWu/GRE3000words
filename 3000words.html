@@ -7,16 +7,49 @@
 </header>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" >
-	var correct = {{ correct }};
-	var recordID = {{ recordID }};
-	function checkAns (ans) {
-		if (ans == correct ) {
-			$.post(document.URL,{ID: recordID });
-			window.open(document.URL,"_self");
-		} else {
-			alert("回答错了，还要加油哦！");
-		}
-	};
+ var recordID
+ var correct
+ function loadWord (){
+          $.get("api",function(data){
+          	$("#tip1").html("用户"+data.user+" 正在背诵GRE3000单词："+data.times+"遍")
+          	$("#tip2").html("已完成单词数 ："+data.recordID+"/"+data.totalCount)
+          	$("#a1").html(data.a1)
+          	$("#a2").html(data.a2)
+          	$("#a3").html(data.a3)
+          	$("#a4").html(data.a4)
+          	$("#q").html(data.q)
+          	correct = data.correct
+          	recordID = data.recordID
+          },"json")
+/*          $.get("api",function(data){
+          	var user = data.user
+          	var times data.times
+          	var recordID = data.recordID
+          	var totalCount = data.totalCount
+          	var a1 = data.a1
+          	var a2 = data.a2
+          	var a3 = data.a3
+          	var a4 = data.a4
+          	var nextCorrect = data.correct
+          	$("#tip1").html("用户"+data.user+" 正在背诵GRE3000单词："+data.times+"遍")
+          	$("#tip2").html("已完成单词数 ："+data.recordID+"/"+data.totalCount)
+          	$("#a1").html(data.a1)
+          	$("#a2").html(data.a2)
+          	$("#a3").html(data.a3)
+          	$("#a4").html(data.a4)
+          	$("#q").html(data.q)
+          	var correct = data.correct
+          },"json") */
+      }
+ function checkAns (ans) {
+	if (ans == correct ) {
+		$.post("api",{ID: recordID });
+		loadWord()
+	} else {
+		alert("回答错了，还要加油哦！");
+	}
+};
+jQuery(document).ready(loadWord);
 </script>
 <style type="text/css">
 	body {background-color: #AAA; margin: 20px auto;background-image: url("{{ static_url("bg.jpg") }}");}
@@ -34,44 +67,16 @@
 <body>
 <div class="main">
 <div class="answer">
-	<p> 已背过3000词汇：{{ times }}遍  还要加油哦！！！</p>
-	<p> 当前记录数 ：{{ recordID }} / {{ totalCount }}</p>
-	<div class="question"> {{ q }} </div> 
+	<p id="tip1"></p>
+	<p id="tip2"></p>
+	<div class="question" id="q">   </div> 
 	<ul id="ans-box">
-		<li onclick="checkAns(1)">{{ a1 }}</li>
-		<li onclick="checkAns(2)">{{ a2 }}</li>
-		<li onclick="checkAns(3)">{{ a3 }}</li>
-		<li onclick="checkAns(4)">{{ a4 }}</li>
+		<li id="a1" onclick="checkAns(1)"> </li>
+		<li id="a2" onclick="checkAns(2)"> </li>
+		<li id="a3" onclick="checkAns(3)"> </li>
+		<li id="a4" onclick="checkAns(4)"> </li>
 	</ul>
 </div>
-<form>
-<table>
-	<tr>
-		<td>
 
-		</td>
-	<tr>
-	<tr>
-		<td>
-			<input type="radio" name=a value=1 onclick="checkAns(1)"/> 
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="radio" name=a value=2 onclick="checkAns(2)"/> {{ a2 }}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="radio" name=a value=3 onclick="checkAns(3)"/> {{ a3 }} 
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="radio" name=a value=4 onclick="checkAns(4)"/> {{ a4 }}
-		</td>
-	</tr>
-</table>
-</form>
 </div>
 </body>

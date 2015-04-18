@@ -7,30 +7,32 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import MySQLdb
+import json
 
 from tornado.options import define, options
 define("port", default=8000, help="run on the given port", type=int)
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('index.html')
+        self.render('3000words.html')
 
 
 class PoemPageHandler(tornado.web.RequestHandler):
 	def get(self):
+		user = "kehao.wu@gmail.com"
 		db = MySQLdb.connect("localhost","3000word","","3000word")
 		cursor = db.cursor()
-		cursor.execute("SELECT * FROM record ORDER BY id DESC LIMIT 1;")
+		cursor.execute("SELECT * FROM record WHERE user='%s' ORDER BY id DESC LIMIT 1 ;" % (user))
 		r = cursor.fetchone()
-		times = r[0]
+		times = r[3]
 		db.commit()
 		totalCount = r[2]
 		recordID = r[1]
-		if recordID == totalCount:
-			sql = "INSERT INTO record (record,totalCount) values(0,'%d')" % (totalCount)
+		if recordID >= totalCount:
+			times = times + 1
+			sql = "INSERT INTO record (record,totalCount,times,user) VALUES(0,'%d','%d','%s')" % (totalCount,times,user)
 			cursor.execute(sql)
 			recordID = 0
-			times = times + 1
 			db.commit()
 		sql = "SELECT * from word LIMIT %d,1;" % recordID
 		cursor.execute(sql)
@@ -55,15 +57,20 @@ class PoemPageHandler(tornado.web.RequestHandler):
 		a2 = answer_set[1]
 		a3 = answer_set[2]
 		a4 = answer_set[3]
-		self.render('3000words.html',recordID=recordID, totalCount=totalCount, \
-			q=q,times=times,a1=a1,a2=a2,a3=a3,a4=a4,correct=answer_index+1)
+		dataJson = {"recordID":recordID, "totalCount":totalCount, "user":user,\
+			"q":q,"times":times,"a1":a1,"a2":a2,"a3":a3,"a4":a4,"correct":answer_index+1}
+		dataJson = json.dumps(dataJson, ensure_ascii=False)
+		self.write(dataJson)
+#		self.render('3000words.html',recordID=recordID, totalCount=totalCount, \
+#			q=q,times=times,a1=a1,a2=a2,a3=a3,a4=a4,correct=answer_index+1)
 
 	def post(self):
+		user = "kehao.wu@gmail.com"
 		db = MySQLdb.connect("localhost","3000word","","3000word")
 		cursor = db.cursor()
 		recordID_new = self.get_argument("ID")
 		recordID_new = int(recordID_new) + 1
-		sql = "UPDATE record SET record='%d';" % recordID_new 
+		sql = "UPDATE record SET record='%d' WHERE user='%s' ORDER BY id DESC LIMIT 1 ;" % (recordID_new,user )
 		cursor.execute(sql)
 		db.commit()
 		db.close()
@@ -73,7 +80,7 @@ if __name__ == '__main__':
 	tornado.options.parse_command_line()
 
 	app = tornado.web.Application(
-		handlers=[(r'/', IndexHandler), (r'/3000words', PoemPageHandler)],
+		handlers=[(r'/', IndexHandler), (r'/api', PoemPageHandler)],
 		template_path=os.path.join(os.path.dirname(__file__), ""),
 		static_path=os.path.join(os.path.dirname(__file__), "statics"),
 		debug=True

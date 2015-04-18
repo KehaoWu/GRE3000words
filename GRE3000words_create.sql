@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS record (
 	id int auto_increment,
     record int    NOT NULL ,
     totalCount int    NOT NULL ,
+    times int    NOT NULL ,
+    user varchar(255)    NOT NULL ,
     CONSTRAINT id_pk PRIMARY KEY (id)
 );
 
