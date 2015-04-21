@@ -2,7 +2,7 @@
 	<title>GRE记单词 皓哥专用版</title>
 	<link rel="shortcut icon" href="{{ static_url("favicon.ico") }}">
 </head>
-<header>
+<header onselectstart="return false;" style="-moz-user-select:none;">
 	<h1> 再要你命3000 皓哥专用版 </h1>
 </header>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -12,10 +12,10 @@
  var oldCorrect
 function liHover (ans){
      $("#a"+ans).mouseover(function(){
-          $("#a"+ans).css("background-color","#e5e5e5");
+          $("#a"+ans).css("background-color","#6FA698");
      });
      $("#a"+ans).mouseout(function(){
-          $("#a"+ans).css("background-color","#BBB");
+          $("#a"+ans).css("background-color","#003729");
      });     
 }
 
@@ -38,7 +38,7 @@ function checkAns (ans) {
 		$.post("api",{ID: recordID });
 		loadWord()
 	} else {
-          $(".ansList").css("background-color","#BBB")
+          $(".ansList").css("background-color","#003729")
           $('#a'+ans).css("background-color","#FF5151")
           liHover(1)
           liHover(2)
@@ -47,23 +47,28 @@ function checkAns (ans) {
 	}
 };
 jQuery(document).ready(loadWord);
+
 </script>
 <style type="text/css">
      * {font-family: Microsoft YaHei}
-	body {background-color: #AAA; margin: 1em auto;background-image: url("{{ static_url("bg.jpg") }}");}
+	body {background-color: #256F5C; margin: 1em auto;}
 	header {width:24em;margin:3em auto 2em;}
+     header:hover {cursor: pointer}
+     footer {width:24em;margin:3em auto 1em;}
+     footer p {font-size: 0.5em;text-align: right;}
 	form {display: none;}
 	p {font-size:1.5em; color:#FFF;}
-	.main {background: #BBB; width: 28em;height: 22em; margin: 0 auto;box-shadow: 0.1em 0.1em 0.1em  rgba(0,0,0,0.75);border-radius:0.3em;padding: 0.8em;opacity:0.8;}
-	.answer {background-color: #BBB;width:26em; margin:0 auto; border: 1px solid #BBB;}
+	.main {background: #003729; width: 28em;height: 22em; margin: 0 auto;box-shadow: 0.1em 0.1em 0.1em  rgba(0,0,0,0.75);border-radius:0.5em;padding: 0.8em;opacity:0.8;}
+	.answer {background-color: #003729;width:26em; margin:0 auto; border: 0px solid #003729;}
 	.answer p {font-size: 12px; margin:0;}
 	.question {font-size: 24px;  color: #FFF; padding: 5px; }
 	.answer ul {list-style:none;margin: 0px; padding: 0px;}
-	.answer ul li {padding: 0.3em; font-size: 0.95em;line-height: 1.5em;border: 1px solid #CCC;height:50px;display: list-item;cursor: pointer;border-radius:0.3em;margin: 0.2em;vertical-align: center;}
-	.answer ul li:hover {background-color: #e5e5e5;box-shadow: 0.1em 0.1em 0.1em #BBB}
+	.answer ul li {padding: 0.3em; font-size: 0.95em;line-height: 1.5em;border: 1px solid #0E5342;height:50px;display: list-item;cursor: pointer;border-radius:0.3em;margin: 0.2em;vertical-align: middle;color:#EEE;}
+	.answer ul li:hover {background-color: #6FA698; color:#003729;}
      .answer .align-right {text-align: right;}
+
 </style>
-<body>
+<body onselectstart="return false;" style="-moz-user-select:none;">
 <div class="main">
 <div class="answer">
      <p class="align-right" id="tip1"></p>
@@ -77,6 +82,8 @@ jQuery(document).ready(loadWord);
 		<li class="ansList" id="a4" onclick="checkAns(4)"> </li>
 	</ul>
 </div>
-
 </div>
+<footer>
+<p>Developed by Kehao Wu. @2015</p> 
+</footer>
 </body>
