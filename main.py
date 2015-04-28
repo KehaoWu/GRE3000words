@@ -1,4 +1,7 @@
 # encoding=utf-8
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 import os.path
 import random
@@ -19,7 +22,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class PoemPageHandler(tornado.web.RequestHandler):
 	def get(self):
-		user = "kehao.wu@gmail.com"
+		user = self.get_argument("email")
 		db = MySQLdb.connect("localhost","3000word","","3000word")
 		cursor = db.cursor()
 		cursor.execute("SELECT * FROM record WHERE user='%s' ORDER BY id DESC LIMIT 1 ;" % (user))
@@ -27,7 +30,6 @@ class PoemPageHandler(tornado.web.RequestHandler):
 		times = r[3]
 		wrongTimes = r[5]
 		wrongCounts = r[6]
-		print "aaa"
 		db.commit()
 		totalCount = r[2]
 		recordID = r[1]
@@ -69,7 +71,7 @@ class PoemPageHandler(tornado.web.RequestHandler):
 #			q=q,times=times,a1=a1,a2=a2,a3=a3,a4=a4,correct=answer_index+1)
 
 	def post(self):
-		user = "kehao.wu@gmail.com"
+		user = self.get_argument("email")
 		db = MySQLdb.connect("localhost","3000word","","3000word")
 		cursor = db.cursor()
 		recordID_new = self.get_argument("ID")
