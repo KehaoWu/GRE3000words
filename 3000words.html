@@ -6,26 +6,30 @@
 <header onselectstart="return false;" style="-moz-user-select:none;">
 <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
   <div class="container">
-     <div class="navbar navbar-default" role="navigation">
-          <div class="navbar-header">
-               <!-- .navbar-toggle样式用于toggle收缩的内容，即nav-collapse collapse样式所在元素 -->
-               <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-               </button>
-               <!-- 确保无论是宽屏还是窄屏，navbar-brand都显示 -->
-               <a href="##" class="navbar-brand"><strong>再要你命3000</strong><small>皓哥专用版</small></a>
+     <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+               <div class="navbar navbar-default" role="navigation">
+                    <div class="navbar-header">
+                    <!-- .navbar-toggle样式用于toggle收缩的内容，即nav-collapse collapse样式所在元素 -->
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                         <span class="sr-only">Toggle Navigation</span>
+                         <span class="icon-bar"></span>
+                         <span class="icon-bar"></span>
+                         <span class="icon-bar"></span>
+                    </button>
+                    <!-- 确保无论是宽屏还是窄屏，navbar-brand都显示 -->
+                    <a href="" class="navbar-brand"><strong>再要你命3000</strong><small>皓哥专用版</small></a>
+               </div>
+               <!-- 屏幕宽度小于768px时，div.navbar-responsive-collapse容器里的内容都会隐藏，显示icon-bar图标，当点击icon-bar图标时，再展开。屏幕大于768px时，默认显示。 -->
+               <div class="collapse navbar-collapse navbar-responsive-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                         <li><a href="##">kehao.wu@gmail.com</a></li>
+                    </ul>
+               </div>
           </div>
-          <!-- 屏幕宽度小于768px时，div.navbar-responsive-collapse容器里的内容都会隐藏，显示icon-bar图标，当点击icon-bar图标时，再展开。屏幕大于768px时，默认显示。 -->
-          <div class="collapse navbar-collapse navbar-responsive-collapse">
-               <ul class="nav navbar-nav navbar-right">
-                    <li><a href="##">kehao.wu@gmail.com</a></li>
-               </ul>
-  </div>
-</div>
-
+          <div class="col-md-2"></div>
+     </div>
   </div>
 </header>
 <center>
@@ -44,10 +48,10 @@
           </div>
           <div class="panel-body">
                <div class="list-group">
-                    <a onclick="checkAns(1)" id="a1" class="list-group-item list-group-item text-left"></a>
-                    <a onclick="checkAns(2)" id="a2" class="list-group-item list-group-item text-left"></a>
-                    <a onclick="checkAns(3)" id="a3" class="list-group-item list-group-item text-left"></a>
-                    <a onclick="checkAns(4)" id="a4" class="list-group-item list-group-item text-left"></a>
+                    <a onclick="checkAns(1)" id="a1" class="list-group-item text-left"></a>
+                    <a onclick="checkAns(2)" id="a2" class="list-group-item text-left"></a>
+                    <a onclick="checkAns(3)" id="a3" class="list-group-item text-left"></a>
+                    <a onclick="checkAns(4)" id="a4" class="list-group-item text-left"></a>
                </div>
           </div>
           <div class="panel-footer text-right">
