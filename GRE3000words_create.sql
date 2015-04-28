@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS record (
     totalCount int    NOT NULL ,
     times int    NOT NULL ,
     user varchar(255)    NOT NULL ,
+    wrongTimes int NOT NULL,
+    wrongCounts int NOT NULL,
     CONSTRAINT id_pk PRIMARY KEY (id)
 );
 

@@ -25,6 +25,9 @@ class PoemPageHandler(tornado.web.RequestHandler):
 		cursor.execute("SELECT * FROM record WHERE user='%s' ORDER BY id DESC LIMIT 1 ;" % (user))
 		r = cursor.fetchone()
 		times = r[3]
+		wrongTimes = r[5]
+		wrongCounts = r[6]
+		print "aaa"
 		db.commit()
 		totalCount = r[2]
 		recordID = r[1]
@@ -58,7 +61,8 @@ class PoemPageHandler(tornado.web.RequestHandler):
 		a3 = answer_set[2]
 		a4 = answer_set[3]
 		dataJson = {"recordID":recordID, "totalCount":totalCount, "user":user,\
-			"q":q,"times":times,"a1":a1,"a2":a2,"a3":a3,"a4":a4,"correct":answer_index+1}
+			"q":q,"times":times,"a1":a1,"a2":a2,"a3":a3,"a4":a4,"correct":answer_index+1,\
+			"wrongTimes":wrongTimes,"wrongCounts":wrongCounts}
 		dataJson = json.dumps(dataJson, ensure_ascii=False)
 		self.write(dataJson)
 #		self.render('3000words.html',recordID=recordID, totalCount=totalCount, \
@@ -69,8 +73,12 @@ class PoemPageHandler(tornado.web.RequestHandler):
 		db = MySQLdb.connect("localhost","3000word","","3000word")
 		cursor = db.cursor()
 		recordID_new = self.get_argument("ID")
+		wrongTimes = self.get_argument("t",0)
+		wrongCounts = self.get_argument("c",0)
 		recordID_new = int(recordID_new) + 1
-		sql = "UPDATE record SET record='%d' WHERE user='%s' ORDER BY id DESC LIMIT 1 ;" % (recordID_new,user )
+		sql = "UPDATE record SET record='%d', wrongTimes=wrongTimes+'%d',\
+		wrongCounts=wrongCounts+'%d' WHERE user='%s' ORDER BY id DESC LIMIT 1 ;" \
+		% (recordID_new,int(wrongTimes),int(wrongCounts),user)
 		cursor.execute(sql)
 		db.commit()
 		db.close()

@@ -1,89 +1,118 @@
 <head>
 	<title>GRE记单词 皓哥专用版</title>
-	<link rel="shortcut icon" href="{{ static_url("favicon.ico") }}">
+	<link rel="shortcut icon" href="{{ static_url('image/favicon.ico') }}">
+     <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
 </head>
 <header onselectstart="return false;" style="-moz-user-select:none;">
-	<h1> 再要你命3000 皓哥专用版 </h1>
+<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+  <div class="container">
+     <div class="navbar navbar-default" role="navigation">
+          <div class="navbar-header">
+               <!-- .navbar-toggle样式用于toggle收缩的内容，即nav-collapse collapse样式所在元素 -->
+               <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+               </button>
+               <!-- 确保无论是宽屏还是窄屏，navbar-brand都显示 -->
+               <a href="##" class="navbar-brand"><strong>再要你命3000</strong><small>皓哥专用版</small></a>
+          </div>
+          <!-- 屏幕宽度小于768px时，div.navbar-responsive-collapse容器里的内容都会隐藏，显示icon-bar图标，当点击icon-bar图标时，再展开。屏幕大于768px时，默认显示。 -->
+          <div class="collapse navbar-collapse navbar-responsive-collapse">
+               <ul class="nav navbar-nav navbar-right">
+                    <li><a href="##">kehao.wu@gmail.com</a></li>
+               </ul>
+  </div>
+</div>
+
+  </div>
 </header>
+<center>
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+    <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-success" style="width:0%" id="pbarSucc"></div>
+     </div>
+     <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-danger" style="width:0%" id="pbarDanger"></div>
+     </div> 
+     <div class="panel panel-primary">
+          <div class="panel-heading">
+               <h4 id="q" class="text-left"></h4>
+          </div>
+          <div class="panel-body">
+               <div class="list-group">
+                    <a onclick="checkAns(1)" id="a1" class="list-group-item list-group-item text-left"></a>
+                    <a onclick="checkAns(2)" id="a2" class="list-group-item list-group-item text-left"></a>
+                    <a onclick="checkAns(3)" id="a3" class="list-group-item list-group-item text-left"></a>
+                    <a onclick="checkAns(4)" id="a4" class="list-group-item list-group-item text-left"></a>
+               </div>
+          </div>
+          <div class="panel-footer text-right">
+               @conda
+          </div>
+     </div>
+
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+
+</center>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" >
  var recordID
  var correct
  var oldCorrect
-function liHover (ans){
-     $("#a"+ans).mouseover(function(){
-          $("#a"+ans).css("background-color","#6FA698");
-     });
-     $("#a"+ans).mouseout(function(){
-          $("#a"+ans).css("background-color","#003729");
-     });     
-}
+ var wrongTimes
+ var wrongCounts
 
 function loadWord (){
           $.get("api",function(data){
-               $("#tip1").html("用户:"+data.user)
-               $("#tip2").html("正在背诵GRE3000单词："+data.times+"遍")
-          	$("#tip3").html("已完成单词数 ："+data.recordID+"/"+data.totalCount)
-          	$("#a1").html(data.a1)
-          	$("#a2").html(data.a2)
-          	$("#a3").html(data.a3)
-          	$("#a4").html(data.a4)
-          	$("#q").html(data.q)
-          	correct = data.correct
-          	recordID = data.recordID
+               var average = Math.round(data.wrongTimes*100/data.wrongCounts)/100
+               if(data.wrongCounts == 0){
+                    average = 0
+               }
+               $("#pbarSucc").width(data.recordID*100/data.totalCount+"%")
+               $("#pbarSucc").html(Math.round(data.recordID*100/data.totalCount)+"%")
+               var wrongBar = Math.round(data.wrongCounts*100/100)
+               if (wrongBar > 100 ){
+                    wrongBar = 100
+               }
+               $("#pbarDanger").width(wrongBar+"%")
+               $("#pbarDanger").html(wrongBar+"%")
+
+               $("#tip3").html("已完成单词数 ："+data.recordID+"/"+data.totalCount)
+               $("#a1").html(data.a1)
+               $("#a2").html(data.a2)
+               $("#a3").html(data.a3)
+               $("#a4").html(data.a4)
+               $("#q").html(data.q+" <span class='label label-info'>正在背诵第"+data.times+"遍的第"+data.recordID+"个单词</span>")
+               correct = data.correct
+               recordID = data.recordID
+               wrongTimes = 0
+               wrongCounts = 0
           },"json");
       }
+var lastAns
 function checkAns (ans) {
-	if (ans == correct ) {
-		$.post("api",{ID: recordID });
-		loadWord()
-	} else {
-          $(".ansList").css("background-color","#003729")
-          $('#a'+ans).css("background-color","#FF5151")
-          liHover(1)
-          liHover(2)
-          liHover(3)
-          liHover(4)
-	}
+     if (typeof(lastAns) != undefined)
+     {
+          $("#a"+lastAns).removeClass("list-group-item-warning");
+     }
+     if (ans == correct ) {
+          if (wrongTimes > 0){
+               wrongCounts = 1
+          }
+          $.post("api",{ID: recordID,t:wrongTimes,c:wrongCounts });
+          loadWord()
+     } else {
+          wrongTimes = wrongTimes + 1
+          $("#a"+ans).toggleClass("list-group-item-warning");
+          lastAns = ans
+     }
 };
 jQuery(document).ready(loadWord);
 
 </script>
-<style type="text/css">
-     * {font-family: Microsoft YaHei}
-	body {background-color: #256F5C; margin: 1em auto;}
-	header {width:24em;margin:3em auto 2em;}
-     header:hover {cursor: pointer}
-     footer {width:24em;margin:3em auto 1em;}
-     footer p {font-size: 0.5em;text-align: right;}
-	form {display: none;}
-	p {font-size:1.5em; color:#FFF;}
-	.main {background: #003729; width: 28em;height: 22em; margin: 0 auto;box-shadow: 0.1em 0.1em 0.1em  rgba(0,0,0,0.75);border-radius:0.5em;padding: 0.8em;opacity:0.8;}
-	.answer {background-color: #003729;width:26em; margin:0 auto; border: 0px solid #003729;}
-	.answer p {font-size: 12px; margin:0;}
-	.question {font-size: 24px;  color: #FFF; padding: 5px; }
-	.answer ul {list-style:none;margin: 0px; padding: 0px;}
-	.answer ul li {padding: 0.3em; font-size: 0.95em;line-height: 1.5em;border: 1px solid #0E5342;height:50px;display: list-item;cursor: pointer;border-radius:0.3em;margin: 0.2em;vertical-align: middle;color:#EEE;}
-	.answer ul li:hover {background-color: #6FA698; color:#003729;}
-     .answer .align-right {text-align: right;}
-
-</style>
-<body onselectstart="return false;" style="-moz-user-select:none;">
-<div class="main">
-<div class="answer">
-     <p class="align-right" id="tip1"></p>
-     <p class="align-right" id="tip2"></p>
-	<p id="tip3"></p>
-	<div class="question" id="q">   </div> 
-	<ul id="ans-box">
-		<li class="ansList" id="a1" onclick="checkAns(1)"> </li>
-		<li class="ansList" id="a2" onclick="checkAns(2)"> </li>
-		<li class="ansList" id="a3" onclick="checkAns(3)"> </li>
-		<li class="ansList" id="a4" onclick="checkAns(4)"> </li>
-	</ul>
-</div>
-</div>
-<footer>
-<p>Developed by Kehao Wu. @2015</p> 
-</footer>
-</body>
